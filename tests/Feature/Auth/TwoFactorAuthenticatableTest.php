@@ -2,11 +2,10 @@
 
 use App\Models\User;
 use Illuminate\Support\Facades\Cookie;
-use PragmaRX\Google2FA\Google2FA;
 
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
-test('two factor enabled attribute returns correct value', function () {
+test('two factor enabled attribute returns correct value', function (): void {
     $user = User::factory()->create();
 
     expect($user->two_factor_enabled)->toBeFalse();
@@ -17,7 +16,7 @@ test('two factor enabled attribute returns correct value', function () {
     expect($user->two_factor_enabled)->toBeTrue();
 });
 
-test('generate two factor secret creates a valid secret', function () {
+test('generate two factor secret creates a valid secret', function (): void {
     $user = User::factory()->create();
 
     $user->generateTwoFactorSecret();
@@ -25,10 +24,10 @@ test('generate two factor secret creates a valid secret', function () {
     expect($user->two_factor_secret)->not->toBeNull();
 
     // Verify it's a valid secret by checking its length (should be 16 characters)
-    expect(strlen($user->two_factor_secret))->toEqual(16);
+    expect(strlen((string) $user->two_factor_secret))->toEqual(16);
 });
 
-test('generate recovery codes creates valid codes', function () {
+test('generate recovery codes creates valid codes', function (): void {
     $user = User::factory()->create();
 
     $user->generateRecoveryCodes();
@@ -42,12 +41,12 @@ test('generate recovery codes creates valid codes', function () {
 
     // Each code should be in the format XXXXXXXXXX-XXXXXXXXXX (21 characters)
     foreach ($recoveryCodes as $code) {
-        expect(strlen($code))->toEqual(21);
+        expect(strlen((string) $code))->toEqual(21);
         expect($code)->toMatch('/^[A-Za-z0-9]{10}-[A-Za-z0-9]{10}$/');
     }
 });
 
-test('verify two factor code validates correct codes', function () {
+test('verify two factor code validates correct codes', function (): void {
     $user = User::factory()->create();
     $user->two_factor_secret = 'test-secret';
 
@@ -67,7 +66,7 @@ test('verify two factor code validates correct codes', function () {
     expect($userMock->verifyTwoFactorCode('invalid-code'))->toBeFalse();
 });
 
-test('verify recovery code validates and removes used codes', function () {
+test('verify recovery code validates and removes used codes', function (): void {
     $user = User::factory()->create();
 
     $user->generateRecoveryCodes();
@@ -85,7 +84,7 @@ test('verify recovery code validates and removes used codes', function () {
     expect($user->verifyRecoveryCode('invalid-code'))->toBeFalse();
 });
 
-test('confirm two factor sets confirmed timestamp', function () {
+test('confirm two factor sets confirmed timestamp', function (): void {
     $user = User::factory()->create();
 
     expect($user->two_factor_confirmed_at)->toBeNull();
@@ -96,7 +95,7 @@ test('confirm two factor sets confirmed timestamp', function () {
     expect($user->two_factor_enabled)->toBeTrue();
 });
 
-test('disable two factor clears all two factor fields', function () {
+test('disable two factor clears all two factor fields', function (): void {
     $user = User::factory()->create();
 
     $user->generateTwoFactorSecret();
@@ -115,7 +114,7 @@ test('disable two factor clears all two factor fields', function () {
     expect($user->two_factor_enabled)->toBeFalse();
 });
 
-test('trusted device methods work correctly', function () {
+test('trusted device methods work correctly', function (): void {
     $user = User::factory()->create(['id' => 1]);
 
     // Mock Cookie facade

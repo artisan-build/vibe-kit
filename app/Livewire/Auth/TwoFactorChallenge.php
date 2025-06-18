@@ -10,8 +10,11 @@ use Livewire\Component;
 class TwoFactorChallenge extends Component
 {
     public string $code = '';
+
     public string $recovery_code = '';
+
     public bool $showingRecoveryCodeForm = false;
+
     public bool $rememberDevice = false;
 
     /**
@@ -46,11 +49,13 @@ class TwoFactorChallenge extends Component
         if ($this->showingRecoveryCodeForm) {
             if (! $user->verifyRecoveryCode($this->recovery_code)) {
                 $this->addError('recovery_code', __('The recovery code entered is invalid.'));
+
                 return;
             }
         } else {
             if (! $user->verifyTwoFactorCode($this->code)) {
                 $this->addError('code', __('The code entered is invalid.'));
+
                 return;
             }
         }

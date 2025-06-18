@@ -1,0 +1,13 @@
+includes:
+    - ./vendor/larastan/larastan/extension.neon
+
+parameters:
+
+    paths:
+        - app/
+    excludePaths:
+        - **/*Test.php
+
+    level: 6
+
+    treatPhpDocTypesAsCertain: false

@@ -6,13 +6,13 @@ use Livewire\Livewire;
 
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
-test('two factor authentication page is displayed', function () {
+test('two factor authentication page is displayed', function (): void {
     $this->actingAs($user = User::factory()->create());
 
     $this->get('/settings/two-factor-authentication')->assertOk();
 });
 
-test('two factor authentication can be enabled', function () {
+test('two factor authentication can be enabled', function (): void {
     $user = User::factory()->create();
 
     $this->actingAs($user);
@@ -30,7 +30,7 @@ test('two factor authentication can be enabled', function () {
     expect($response->get('showingConfirmationForm'))->toBeTrue();
 });
 
-test('two factor authentication can be confirmed', function () {
+test('two factor authentication can be confirmed', function (): void {
     $user = User::factory()->create();
 
     $this->actingAs($user);
@@ -54,7 +54,7 @@ test('two factor authentication can be confirmed', function () {
     expect($livewire->get('showingRecoveryCodes'))->toBeTrue();
 });
 
-test('invalid confirmation code shows an error', function () {
+test('invalid confirmation code shows an error', function (): void {
     $user = User::factory()->create();
 
     $this->actingAs($user);
@@ -74,7 +74,7 @@ test('invalid confirmation code shows an error', function () {
     expect($user->two_factor_enabled)->toBeFalse();
 });
 
-test('recovery codes can be shown', function () {
+test('recovery codes can be shown', function (): void {
     $user = User::factory()->create();
 
     // Setup 2FA for the user
@@ -92,7 +92,7 @@ test('recovery codes can be shown', function () {
     expect($response->get('showingRecoveryCodes'))->toBeTrue();
 });
 
-test('recovery codes can be regenerated', function () {
+test('recovery codes can be regenerated', function (): void {
     $user = User::factory()->create();
 
     // Setup 2FA for the user
@@ -117,7 +117,7 @@ test('recovery codes can be regenerated', function () {
     expect($newCodes)->not->toEqual($originalCodes);
 });
 
-test('two factor authentication can be disabled', function () {
+test('two factor authentication can be disabled', function (): void {
     $user = User::factory()->create();
 
     // Setup 2FA for the user
@@ -149,7 +149,7 @@ test('two factor authentication can be disabled', function () {
     expect($livewire->get('showingTwoFactorDisabledForm'))->toBeFalse();
 });
 
-test('invalid code shows an error when disabling two factor authentication', function () {
+test('invalid code shows an error when disabling two factor authentication', function (): void {
     $user = User::factory()->create();
 
     // Setup 2FA for the user

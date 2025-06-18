@@ -4,11 +4,10 @@ use App\Livewire\Auth\Login;
 use App\Livewire\Auth\TwoFactorChallenge;
 use App\Models\User;
 use Livewire\Livewire;
-use Mockery;
 
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
-test('users with two factor authentication are redirected to the two factor challenge', function () {
+test('users with two factor authentication are redirected to the two factor challenge', function (): void {
     // Create a user with 2FA enabled
     $user = User::factory()->create();
     $user->generateTwoFactorSecret();
@@ -32,7 +31,7 @@ test('users with two factor authentication are redirected to the two factor chal
     $this->get('/two-factor-challenge')->assertOk();
 });
 
-test('users can complete the two factor challenge with a valid code', function () {
+test('users can complete the two factor challenge with a valid code', function (): void {
     // Create a user with 2FA enabled
     $user = User::factory()->create();
     $user->generateTwoFactorSecret();
@@ -69,7 +68,7 @@ test('users can complete the two factor challenge with a valid code', function (
     $response->assertRedirect(route('dashboard', absolute: false));
 });
 
-test('users can complete the two factor challenge with a valid recovery code', function () {
+test('users can complete the two factor challenge with a valid recovery code', function (): void {
     // Create a user with 2FA enabled
     $user = User::factory()->create();
     $user->generateTwoFactorSecret();
@@ -107,7 +106,7 @@ test('users can complete the two factor challenge with a valid recovery code', f
     $response->assertRedirect(route('dashboard', absolute: false));
 });
 
-test('users cannot complete the two factor challenge with an invalid code', function () {
+test('users cannot complete the two factor challenge with an invalid code', function (): void {
     // Create a user with 2FA enabled
     $user = User::factory()->create();
     $user->generateTwoFactorSecret();
@@ -133,7 +132,7 @@ test('users cannot complete the two factor challenge with an invalid code', func
     $response->assertHasErrors(['code']);
 });
 
-test('users cannot complete the two factor challenge with an invalid recovery code', function () {
+test('users cannot complete the two factor challenge with an invalid recovery code', function (): void {
     // Create a user with 2FA enabled
     $user = User::factory()->create();
     $user->generateTwoFactorSecret();
@@ -160,7 +159,7 @@ test('users cannot complete the two factor challenge with an invalid recovery co
     $response->assertHasErrors(['recovery_code']);
 });
 
-test('users can toggle between code and recovery code forms', function () {
+test('users can toggle between code and recovery code forms', function (): void {
     // Create a user with 2FA enabled
     $user = User::factory()->create();
     $user->generateTwoFactorSecret();
@@ -182,7 +181,7 @@ test('users can toggle between code and recovery code forms', function () {
     expect($livewire->get('showingRecoveryCodeForm'))->toBeFalse();
 });
 
-test('users can remember the device when completing the two factor challenge', function () {
+test('users can remember the device when completing the two factor challenge', function (): void {
     // Create a user with 2FA enabled
     $user = User::factory()->create();
     $user->generateTwoFactorSecret();
@@ -211,7 +210,7 @@ test('users can remember the device when completing the two factor challenge', f
     $trustDeviceCalled = false;
     $userMock->shouldReceive('trustDevice')
         ->withAnyArgs()
-        ->andReturnUsing(function () use (&$trustDeviceCalled) {
+        ->andReturnUsing(function () use (&$trustDeviceCalled): void {
             $trustDeviceCalled = true;
         });
 

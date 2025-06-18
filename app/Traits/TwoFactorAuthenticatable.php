@@ -26,7 +26,7 @@ trait TwoFactorAuthenticatable
      */
     public function generateTwoFactorSecret()
     {
-        $google2fa = new Google2FA();
+        $google2fa = new Google2FA;
 
         $this->two_factor_secret = $google2fa->generateSecretKey();
 
@@ -40,9 +40,7 @@ trait TwoFactorAuthenticatable
      */
     public function generateRecoveryCodes()
     {
-        $this->two_factor_recovery_codes = json_encode(Collection::times(8, function () {
-            return Str::random(10).'-'.Str::random(10);
-        })->all());
+        $this->two_factor_recovery_codes = json_encode(Collection::times(8, fn () => Str::random(10).'-'.Str::random(10))->all());
 
         return $this;
     }
@@ -74,7 +72,7 @@ trait TwoFactorAuthenticatable
             return true;
         }
 
-        $google2fa = new Google2FA();
+        $google2fa = new Google2FA;
 
         return $google2fa->verifyKey($this->two_factor_secret, $code);
     }
@@ -140,7 +138,7 @@ trait TwoFactorAuthenticatable
      */
     public function hasTrustedDevice()
     {
-        $cookieName = 'two_factor_' . $this->id . '_trusted';
+        $cookieName = 'two_factor_'.$this->id.'_trusted';
 
         return Cookie::has($cookieName);
     }
@@ -153,13 +151,13 @@ trait TwoFactorAuthenticatable
      */
     public function trustDevice($days = null)
     {
-        $days = $days ?? config('settings.two_factor_trust');
+        $days ??= config('settings.two_factor_trust');
 
         if (is_null($days)) {
             return;
         }
 
-        $cookieName = 'two_factor_' . $this->id . '_trusted';
+        $cookieName = 'two_factor_'.$this->id.'_trusted';
 
         Cookie::queue($cookieName, true, $days * 1440); // Convert days to minutes
     }
@@ -171,7 +169,7 @@ trait TwoFactorAuthenticatable
      */
     public function forgetTrustedDevice()
     {
-        $cookieName = 'two_factor_' . $this->id . '_trusted';
+        $cookieName = 'two_factor_'.$this->id.'_trusted';
 
         Cookie::queue(Cookie::forget($cookieName));
     }

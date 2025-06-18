@@ -4,16 +4,20 @@ namespace App\Livewire\Settings;
 
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-use PragmaRX\Google2FA\Google2FA;
 use PragmaRX\Google2FAQRCode\Google2FA as Google2FAQRCode;
 
 class TwoFactorAuthentication extends Component
 {
     public bool $showingQrCode = false;
+
     public bool $showingRecoveryCodes = false;
+
     public bool $showingConfirmationForm = false;
+
     public bool $showingTwoFactorDisabledForm = false;
+
     public string $code = '';
+
     public string $confirmationCode = '';
 
     /**
@@ -22,7 +26,7 @@ class TwoFactorAuthentication extends Component
     public function mount(): void
     {
         // Only show the component if 2FA is enabled in the config
-        if (!config('settings.two_factor_authentication')) {
+        if (! config('settings.two_factor_authentication')) {
             return;
         }
     }
@@ -40,7 +44,7 @@ class TwoFactorAuthentication extends Component
      */
     public function enableTwoFactorAuthentication(): void
     {
-        if (!config('settings.two_factor_authentication')) {
+        if (! config('settings.two_factor_authentication')) {
             return;
         }
 
@@ -60,14 +64,15 @@ class TwoFactorAuthentication extends Component
      */
     public function confirmTwoFactorAuthentication(): void
     {
-        if (!config('settings.two_factor_authentication')) {
+        if (! config('settings.two_factor_authentication')) {
             return;
         }
 
         $user = Auth::user();
 
-        if (!$user->verifyTwoFactorCode($this->confirmationCode)) {
+        if (! $user->verifyTwoFactorCode($this->confirmationCode)) {
             $this->addError('confirmationCode', __('The provided two factor authentication code was invalid.'));
+
             return;
         }
 
@@ -86,11 +91,11 @@ class TwoFactorAuthentication extends Component
      */
     public function showRecoveryCodes(): void
     {
-        if (!config('settings.two_factor_authentication')) {
+        if (! config('settings.two_factor_authentication')) {
             return;
         }
 
-        if (!Auth::user()->two_factor_enabled) {
+        if (! Auth::user()->two_factor_enabled) {
             return;
         }
 
@@ -102,11 +107,11 @@ class TwoFactorAuthentication extends Component
      */
     public function regenerateRecoveryCodes(): void
     {
-        if (!config('settings.two_factor_authentication')) {
+        if (! config('settings.two_factor_authentication')) {
             return;
         }
 
-        if (!Auth::user()->two_factor_enabled) {
+        if (! Auth::user()->two_factor_enabled) {
             return;
         }
 
@@ -124,7 +129,7 @@ class TwoFactorAuthentication extends Component
      */
     public function showTwoFactorDisabledForm(): void
     {
-        if (!config('settings.two_factor_authentication')) {
+        if (! config('settings.two_factor_authentication')) {
             return;
         }
 
@@ -136,14 +141,15 @@ class TwoFactorAuthentication extends Component
      */
     public function disableTwoFactorAuthentication(): void
     {
-        if (!config('settings.two_factor_authentication')) {
+        if (! config('settings.two_factor_authentication')) {
             return;
         }
 
         $user = Auth::user();
 
-        if (!$user->verifyTwoFactorCode($this->code)) {
+        if (! $user->verifyTwoFactorCode($this->code)) {
             $this->addError('code', __('The provided two factor authentication code was invalid.'));
+
             return;
         }
 
@@ -163,11 +169,11 @@ class TwoFactorAuthentication extends Component
     {
         $user = Auth::user();
 
-        if (!$user->two_factor_secret) {
+        if (! $user->two_factor_secret) {
             return '';
         }
 
-        $google2fa = new Google2FAQRCode();
+        $google2fa = new Google2FAQRCode;
 
         return $google2fa->getQRCodeInline(
             config('app.name'),
@@ -183,7 +189,7 @@ class TwoFactorAuthentication extends Component
     {
         $user = Auth::user();
 
-        if (!$user->two_factor_recovery_codes) {
+        if (! $user->two_factor_recovery_codes) {
             return [];
         }
 
