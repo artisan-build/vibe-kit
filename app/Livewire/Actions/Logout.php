@@ -10,7 +10,7 @@ class Logout
     /**
      * Log the current user out of the application.
      */
-    public function __invoke()
+    public function __invoke(): \Illuminate\Http\RedirectResponse|\Livewire\Features\SupportRedirects\Redirector
     {
         Auth::guard('web')->logout();
 

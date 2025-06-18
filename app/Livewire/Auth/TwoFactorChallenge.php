@@ -20,7 +20,7 @@ class TwoFactorChallenge extends Component
     /**
      * Render the component.
      */
-    public function render()
+    public function render(): \Illuminate\View\View
     {
         return view('livewire.auth.two-factor-challenge');
     }

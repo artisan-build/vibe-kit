@@ -34,7 +34,7 @@ class TwoFactorAuthentication extends Component
     /**
      * Render the component.
      */
-    public function render()
+    public function render(): \Illuminate\View\View
     {
         return view('livewire.settings.two-factor-authentication');
     }
@@ -184,6 +184,8 @@ class TwoFactorAuthentication extends Component
 
     /**
      * Get the user's recovery codes.
+     *
+     * @return array<int, string>
      */
     public function getRecoveryCodesProperty(): array
     {

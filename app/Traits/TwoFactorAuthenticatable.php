@@ -48,7 +48,7 @@ trait TwoFactorAuthenticatable
     /**
      * Get the two factor authentication recovery codes.
      *
-     * @return array
+     * @return array<int, string>
      */
     public function getRecoveryCodes()
     {
