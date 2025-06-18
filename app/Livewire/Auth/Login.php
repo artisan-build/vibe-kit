@@ -43,7 +43,14 @@ class Login extends Component
         RateLimiter::clear($this->throttleKey());
         Session::regenerate();
 
-        $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+        $user = Auth::user();
+
+        // Check if 2FA is enabled in config and for the user
+        if (config('settings.two_factor_authentication') && $user->two_factor_enabled && !$user->hasTrustedDevice()) {
+            $this->redirect(route('two-factor.challenge', absolute: false), navigate: true);
+        } else {
+            $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+        }
     }
 
     /**

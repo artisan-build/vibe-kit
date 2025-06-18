@@ -6,6 +6,7 @@ use App\Livewire\Auth\ForgotPassword;
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
 use App\Livewire\Auth\ResetPassword;
+use App\Livewire\Auth\TwoFactorChallenge;
 use App\Livewire\Auth\VerifyEmail;
 use Illuminate\Support\Facades\Route;
 
@@ -26,6 +27,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('confirm-password', ConfirmPassword::class)
         ->name('password.confirm');
+
+    Route::get('two-factor-challenge', TwoFactorChallenge::class)
+        ->name('two-factor.challenge');
 });
 
 Route::post('logout', App\Livewire\Actions\Logout::class)
