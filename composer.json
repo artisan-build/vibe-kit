@@ -1,8 +1,8 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/livewire-starter-kit",
+    "name": "artisan-build/vibe",
     "type": "project",
-    "description": "The official Laravel starter kit for Livewire.",
+    "description": "Our TALL Stack starter kit optimized for AI",
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {

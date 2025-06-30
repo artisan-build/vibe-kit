@@ -19,7 +19,7 @@ return RectorConfig::configure()
     // uncomment to reach your current PHP version
     ->withPhpSets()
     ->withSets([
-        LaravelLevelSetList::UP_TO_LARAVEL_110,
+        LaravelLevelSetList::UP_TO_LARAVEL_120,
         LaravelSetList::LARAVEL_CODE_QUALITY,
         LaravelSetList::LARAVEL_COLLECTION,
     ])

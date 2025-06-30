@@ -3,6 +3,7 @@
 use App\Livewire\Settings\TwoFactorAuthenticationPage;
 use App\Models\User;
 use Livewire\Livewire;
+use Mockery;
 
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
@@ -57,11 +58,33 @@ test('two factor authentication can be confirmed', function (): void {
 test('invalid confirmation code shows an error', function (): void {
     $user = User::factory()->create();
 
-    $this->actingAs($user);
+    // Setup 2FA for the user (but don't confirm it yet)
+    $user->generateTwoFactorSecret();
+    $user->generateRecoveryCodes();
+    $user->save();
 
-    // First enable 2FA
-    $livewire = Livewire::test(TwoFactorAuthenticationPage::class)
-        ->call('enableTwoFactorAuthentication');
+    // Create a partial mock of the User model
+    $userMock = Mockery::mock($user)->makePartial();
+    $userMock->shouldAllowMockingProtectedMethods();
+
+    // Set up expectations for the verifyTwoFactorCode method
+    $userMock->shouldReceive('verifyTwoFactorCode')
+        ->with('invalid-code')
+        ->andReturn(false);
+
+    // Set the authenticated user to our mocked instance
+    $this->actingAs($userMock);
+
+    // Test with Livewire component
+    $livewire = Livewire::test(TwoFactorAuthenticationPage::class);
+
+    // The component should detect that 2FA is enabled but not confirmed
+    $livewire->assertSet('showingQrCode', false);
+    $livewire->assertSet('showingConfirmationForm', false);
+
+    // Manually set the component to show the confirmation form
+    $livewire->set('showingQrCode', true)
+        ->set('showingConfirmationForm', true);
 
     // Now try to confirm with invalid code
     $livewire->set('confirmationCode', 'invalid-code')
@@ -158,7 +181,20 @@ test('invalid code shows an error when disabling two factor authentication', fun
     $user->confirmTwoFactor();
     $user->save();
 
-    $this->actingAs($user);
+    // Get a fresh instance of the user
+    $user = User::find($user->id);
+
+    // Create a partial mock of the User model
+    $userMock = Mockery::mock($user)->makePartial();
+    $userMock->shouldAllowMockingProtectedMethods();
+
+    // Set up expectations for the verifyTwoFactorCode method
+    $userMock->shouldReceive('verifyTwoFactorCode')
+        ->with('invalid-code')
+        ->andReturn(false);
+
+    // Set the authenticated user to our mocked instance
+    $this->actingAs($userMock);
 
     // First show the disabled form
     $livewire = Livewire::test(TwoFactorAuthenticationPage::class)

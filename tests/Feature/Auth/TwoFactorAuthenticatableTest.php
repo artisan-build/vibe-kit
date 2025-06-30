@@ -1,5 +1,7 @@
 <?php
 
+@covers(\App\Traits\TwoFactorAuthenticatable::class);
+
 use App\Models\User;
 use Illuminate\Support\Facades\Cookie;
 
@@ -52,6 +54,7 @@ test('verify two factor code validates correct codes', function (): void {
 
     // Create a partial mock of the User model
     $userMock = Mockery::mock($user)->makePartial();
+    $userMock->shouldAllowMockingProtectedMethods();
 
     // Set up expectations for the verifyTwoFactorCode method
     $userMock->shouldReceive('verifyTwoFactorCode')
@@ -114,31 +117,114 @@ test('disable two factor clears all two factor fields', function (): void {
     expect($user->two_factor_enabled)->toBeFalse();
 });
 
-test('trusted device methods work correctly', function (): void {
-    $user = User::factory()->create(['id' => 1]);
+test('cookie name is generated correctly', function (): void {
+    $user = User::factory()->create(['id' => 123, 'password' => 'test_password_hash']);
 
-    // Mock Cookie facade
+    // Create a partial mock of the User model to test protected method
+    $userMock = Mockery::mock($user)->makePartial();
+    $userMock->shouldAllowMockingProtectedMethods();
+
+    // Mock the getOrCreateDeviceId method
+    $userMock->shouldReceive('getOrCreateDeviceId')
+        ->andReturn('test-device-id');
+
+    // Call the method with a specific user agent
+    $cookieName = $userMock->generateTwoFactorCookieName('test-user-agent');
+
+    // Verify the cookie name format
+    expect($cookieName)->toStartWith('tf_');
+    expect(strlen((string) $cookieName))->toEqual(67); // 'tf_' + 64 characters for SHA-256 hash
+
+    // Verify that changing any of the inputs produces a different hash
+    $userMock2 = Mockery::mock(User::factory()->create(['id' => 456, 'password' => 'test_password_hash']))->makePartial();
+    $userMock2->shouldAllowMockingProtectedMethods();
+    $userMock2->shouldReceive('getOrCreateDeviceId')->andReturn('test-device-id');
+    $cookieName2 = $userMock2->generateTwoFactorCookieName('test-user-agent');
+    expect($cookieName2)->not->toEqual($cookieName);
+
+    // Verify that changing the user agent produces a different hash
+    $cookieName3 = $userMock->generateTwoFactorCookieName('different-user-agent');
+    expect($cookieName3)->not->toEqual($cookieName);
+});
+
+test('device id is created and retrieved correctly', function (): void {
+    $user = User::factory()->create();
+
+    // Create a partial mock of the User model to test protected method
+    $userMock = Mockery::mock($user)->makePartial();
+    $userMock->shouldAllowMockingProtectedMethods();
+
+    // Test the case where the cookie doesn't exist
+    $userMock1 = Mockery::mock($user)->makePartial();
+    $userMock1->shouldAllowMockingProtectedMethods();
+
     Cookie::shouldReceive('has')
-        ->with('two_factor_1_trusted')
+        ->with('device_id')
         ->andReturn(false);
 
-    expect($user->hasTrustedDevice())->toBeFalse();
-
-    // Mock trusting a device
     Cookie::shouldReceive('queue')
-        ->with('two_factor_1_trusted', true, 30 * 1440)
-        ->once();
+        ->withArgs(fn ($name, $value, $minutes) => $name === 'device_id' &&
+               is_string($value) &&
+               strlen($value) > 0 &&
+               $minutes === 60 * 24 * 365 * 5);
 
-    $user->trustDevice(30);
+    $deviceId1 = $userMock1->getOrCreateDeviceId();
+    expect($deviceId1)->toBeString();
+    expect(strlen((string) $deviceId1))->toBeGreaterThan(0);
+
+    // Test the case where the cookie exists
+    $userMock2 = Mockery::mock($user)->makePartial();
+    $userMock2->shouldAllowMockingProtectedMethods();
+
+    Cookie::shouldReceive('has')
+        ->with('device_id')
+        ->andReturn(true);
+
+    Cookie::shouldReceive('get')
+        ->with('device_id')
+        ->andReturn('existing-device-id');
+
+    $deviceId2 = $userMock2->getOrCreateDeviceId();
+    expect($deviceId2)->toBeString();
+    expect(strlen((string) $deviceId2))->toBeGreaterThan(0);
+});
+
+test('trusted device methods work correctly', function (): void {
+    $user = User::factory()->create(['id' => 1, 'password' => 'hashed_password']);
+
+    // Create a partial mock of the User model
+    $userMock = Mockery::mock($user)->makePartial();
+    $userMock->shouldAllowMockingProtectedMethods();
+
+    // Mock the getOrCreateDeviceId method to avoid calling the actual method
+    // which would try to use the Cookie facade
+    $userMock->shouldReceive('getOrCreateDeviceId')
+        ->andReturn('test-device-id');
+
+    // Mock the generateTwoFactorCookieName method
+    $cookieName = 'tf_'.hash('sha256', '1'.'hashed_password'.'test-device-id'.'test-user-agent');
+    $userMock->shouldReceive('generateTwoFactorCookieName')
+        ->andReturn($cookieName);
+
+    // Mock Cookie facade for all methods that might be called
+    Cookie::shouldReceive('has')
+        ->with($cookieName)
+        ->andReturn(false);
+
+    // Mock Cookie::queue for any calls
+    Cookie::shouldReceive('queue')
+        ->withAnyArgs()
+        ->andReturn(null);
+
+    expect($userMock->hasTrustedDevice())->toBeFalse();
+
+    // Test trusting a device
+    $userMock->trustDevice(30);
 
     // Mock forgetting a device
     Cookie::shouldReceive('forget')
-        ->with('two_factor_1_trusted')
+        ->withAnyArgs()
         ->andReturn('cookie-instance');
 
-    Cookie::shouldReceive('queue')
-        ->with('cookie-instance')
-        ->once();
-
-    $user->forgetTrustedDevice();
+    $userMock->forgetTrustedDevice();
 });

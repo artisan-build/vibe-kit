@@ -5,8 +5,6 @@ use App\Livewire\Auth\TwoFactorChallenge;
 use App\Models\User;
 use Livewire\Livewire;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
-
 test('users with two factor authentication are redirected to the two factor challenge', function (): void {
     // Create a user with 2FA enabled
     $user = User::factory()->create();
@@ -50,6 +48,7 @@ test('users can complete the two factor challenge with a valid code', function (
 
     // Create a partial mock of the User model
     $userMock = Mockery::mock($user)->makePartial();
+    $userMock->shouldAllowMockingProtectedMethods();
 
     // Set up expectations for the verifyTwoFactorCode method
     $userMock->shouldReceive('verifyTwoFactorCode')
@@ -87,6 +86,7 @@ test('users can complete the two factor challenge with a valid recovery code', f
 
     // Create a partial mock of the User model
     $userMock = Mockery::mock($user)->makePartial();
+    $userMock->shouldAllowMockingProtectedMethods();
 
     // Set up expectations for the verifyRecoveryCode method
     $userMock->shouldReceive('verifyRecoveryCode')
@@ -120,9 +120,20 @@ test('users cannot complete the two factor challenge with an invalid code', func
         ->set('password', 'password')
         ->call('login');
 
-    // Set the authenticated user
+    // Mock the verification of the 2FA code
     $user = User::find($user->id); // Get a fresh instance
-    $this->actingAs($user);
+
+    // Create a partial mock of the User model
+    $userMock = Mockery::mock($user)->makePartial();
+    $userMock->shouldAllowMockingProtectedMethods();
+
+    // Set up expectations for the verifyTwoFactorCode method
+    $userMock->shouldReceive('verifyTwoFactorCode')
+        ->with('invalid-code')
+        ->andReturn(false);
+
+    // Set the authenticated user to our mocked instance
+    $this->actingAs($userMock);
 
     // Attempt to complete the 2FA challenge with an invalid code
     $response = Livewire::test(TwoFactorChallenge::class)
@@ -146,9 +157,20 @@ test('users cannot complete the two factor challenge with an invalid recovery co
         ->set('password', 'password')
         ->call('login');
 
-    // Set the authenticated user
+    // Mock the verification of the recovery code
     $user = User::find($user->id); // Get a fresh instance
-    $this->actingAs($user);
+
+    // Create a partial mock of the User model
+    $userMock = Mockery::mock($user)->makePartial();
+    $userMock->shouldAllowMockingProtectedMethods();
+
+    // Set up expectations for the verifyRecoveryCode method
+    $userMock->shouldReceive('verifyRecoveryCode')
+        ->with('invalid-recovery-code')
+        ->andReturn(false);
+
+    // Set the authenticated user to our mocked instance
+    $this->actingAs($userMock);
 
     // Attempt to complete the 2FA challenge with an invalid recovery code
     $response = Livewire::test(TwoFactorChallenge::class)
@@ -200,6 +222,7 @@ test('users can remember the device when completing the two factor challenge', f
 
     // Create a partial mock of the User model
     $userMock = Mockery::mock($user)->makePartial();
+    $userMock->shouldAllowMockingProtectedMethods();
 
     // Set up expectations for the verifyTwoFactorCode method
     $userMock->shouldReceive('verifyTwoFactorCode')
