@@ -1,5 +1,7 @@
 # Vibe Kit by Artisan Build
 
+> **⚠️ WARNING: This starter kit is still in active development and is not ready for production use. Please do not use this in production environments. We will announce when it is ready and has been added to Packagist.**
+
 ### An AI-Optimzied TALL Stack Starter Kit
 
 This is the starter kit that we use for all of our TALL stack projects. It is highly opinionated and comes with tooling designed to offload the "boring stuff" about building a Laravel APP to AI agents.
