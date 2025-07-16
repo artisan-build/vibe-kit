@@ -1,0 +1,30 @@
+
+  [44;1m INFO [49;22m Warning: The use statement with non-compound name 'Mockery' has no effect in /Users/ed/Projects/sites/vibe/tests/Feature/Settings/TwoFactorAuthenticationTest.php on line 6.
+
+
+  ..........
+
+  Tests:    10 passed (47 assertions)
+  Duration: 1.26s
+
+  Mutating application files...
+  [90m1 Mutations for 1 Files created[39m
+
+  [39;100;1m RUN [39;49;22m app/Traits/TwoFactorAuthenticatable.php
+  [33;1m-[39;22m [90mLine 64: IfNegated[39m
+  [39;101;1m UNCOVERED [39;49;22m [39;1mapp/Traits/TwoFactorAuthenticatable.php [39;22m[90m > Line 64: IfNegated - ID: bcfe7f9240f1d2a4[39m
+[39;1m
+  [39;22m[90m             return false;[39m[39;1m
+  [39;22m[90m         }[39m[39;1m
+  [39;22m[90m         // For testing purposes, if the code is '123456', return true[39m[39;1m
+  [39;22m[31m-        if ($code === '123456' && app()->environment('testing')) {[39m[39;1m
+  [39;22m[32m+        if (!($code === '123456' && app()->environment('testing'))) {[39m[39;1m
+  [39;22m[90m             return true;[39m[39;1m
+  [39;22m[90m         }[39m[39;1m
+  [39;22m[90m         return (new Google2FA())->verifyKey($this->two_factor_secret, $code);[39m[39;1m
+  [39;22m[39;1m
+[39;22m
+[39;1m  [39;22m[90mMutations:[39m[39;1m [39;22m[33;1m1 uncovered[39;22m[90m,[39m[39m [39m[32;1m0 tested[39;22m
+[39m  [39m[90mScore:[39m[39m     [39m[39m0.00%[39m
+[39m  [39m[90mDuration:[39m[39m  [39m[39m0.00s[39m
+

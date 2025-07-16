@@ -210,3 +210,66 @@ test('invalid code shows an error when disabling two factor authentication', fun
 
     expect($user->two_factor_enabled)->toBeTrue();
 });
+
+test('verifyTwoFactorCode proceeds when secret and code are not null', function (): void {
+    $user = User::factory()->create();
+    $user->generateTwoFactorSecret();
+    $user->save();
+
+    // Use a code that is not null and not the special test code
+    $code = '654321';
+
+    // Mock Google2FA to ensure the method proceeds past the null check
+    $mock = Mockery::mock('overload:PragmaRX\Google2FA\Google2FA');
+    $mock->shouldReceive('verifyKey')
+        ->with($user->two_factor_secret, $code)
+        ->once()
+        ->andReturn(true);
+
+    $result = $user->verifyTwoFactorCode($code);
+    expect($result)->toBeTrue();
+});
+
+test('verifyTwoFactorCode does not return false when both secret and code are not null', function (): void {
+    $user = User::factory()->create();
+    $user->generateTwoFactorSecret();
+    $user->save();
+
+    $code = '654321';
+
+    $called = false;
+    $mock = Mockery::mock('overload:PragmaRX\Google2FA\Google2FA');
+    $mock->shouldReceive('verifyKey')
+        ->with($user->two_factor_secret, $code)
+        ->once()
+        ->andReturnUsing(function () use (&$called) {
+            $called = true;
+            return true;
+        });
+
+    $result = $user->verifyTwoFactorCode($code);
+    expect($result)->toBeTrue();
+    expect($called)->toBeTrue(); // This will fail if verifyKey is not called (i.e., if the mutation is present)
+});
+
+test('verifyTwoFactorCode returns true for special code 123456 in testing environment', function (): void {
+    $user = User::factory()->create();
+    $user->generateTwoFactorSecret();
+    $user->save();
+
+    $result = $user->verifyTwoFactorCode('123456');
+    expect($result)->toBeTrue();
+});
+
+test('verifyTwoFactorCode does not proceed if secret or code is null', function (): void {
+    $user = User::factory()->create();
+    // Case 1: secret is null, code is not null
+    $result1 = $user->verifyTwoFactorCode('anycode');
+    expect($result1)->toBeFalse();
+
+    // Case 2: secret is not null, code is null
+    $user->generateTwoFactorSecret();
+    $user->save();
+    $result2 = $user->verifyTwoFactorCode(null);
+    expect($result2)->toBeFalse();
+});

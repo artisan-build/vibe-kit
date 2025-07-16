@@ -14,4 +14,8 @@ Once all of the untested mutations have been copied into the checklist, delete t
 
 Add tests to cover all untested mutations in the `./.tasks/mutations.md` file and re-run the test by id to verify that it is covered.
 
-When you have finished all of the items in the checklist, re-start this workflow and run it again until there are no untested mutations.
+**Important -** Do not edit any of the existing tests. Create new tests to cover the mutations.
+
+**Important -** Do not edit any of the covered code.
+
+If you are unable to cover the mutation by adding a test, leave the item unchecked and put an explanation below it. Move on to the next item in the checklist.
