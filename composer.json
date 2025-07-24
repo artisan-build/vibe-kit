@@ -1,12 +1,13 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "artisan-build/vibe",
+    "name": "artisan-build/vibe-kit",
     "type": "project",
     "description": "Our TALL Stack starter kit optimized for AI",
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "artisan-build/vibe": "*",
         "filament/filament": "~4.0",
         "laravel/fortify": "^1.27",
         "laravel/framework": "^12.0",
@@ -92,7 +93,8 @@
             "composer rector",
             "composer lint",
             "composer stan",
-            "composer test"
+            "composer test",
+            "composer update --dry-run roave/security-advisories"
         ],
         "coverage-html": [
             "XDEBUG_MODE=coverage herd debug ./vendor/bin/pest --coverage-php coverage.php",
@@ -125,6 +127,10 @@
         "flux-pro": {
             "type": "composer",
             "url": "https://composer.fluxui.dev"
+        },
+        "vibe": {
+            "type": "path",
+            "url": "./packages/vibe"
         }
     }
 }

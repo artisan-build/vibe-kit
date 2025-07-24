@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Livewire\Settings\TwoFactorAuthenticationPage;
 use App\Models\User;
 use Livewire\Livewire;
@@ -244,6 +246,7 @@ test('verifyTwoFactorCode does not return false when both secret and code are no
         ->once()
         ->andReturnUsing(function () use (&$called) {
             $called = true;
+
             return true;
         });
 

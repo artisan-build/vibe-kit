@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 @covers(\App\Traits\TwoFactorAuthenticatable::class);
 
 use App\Models\User;
