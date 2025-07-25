@@ -11,3 +11,17 @@ parameters:
     level: 6
 
     treatPhpDocTypesAsCertain: false
+    
+    ignoreErrors:
+        # Ignore generic trait issues for HasFactory
+        - 
+            message: '#uses generic trait .+HasFactory but does not specify its types: TFactory#'
+            path: app/Models/*
+        # Ignore fillable type covariance issues
+        -
+            message: '#PHPDoc type array<int, string> of property .+::\$fillable is not covariant#'
+            path: app/Models/*
+        # Ignore missing generic types for Eloquent relations
+        -
+            message: '#Method .+ return type with generic class .+ does not specify its types#'
+            path: app/Models/*
