@@ -28,12 +28,12 @@ These are the tasks to be completed for the spec detailed in @.agent-os/specs/20
 
 - [ ] 3. Implement AI Service Integration
   - [ ] 3.1 Write tests for AI service integration
-  - [ ] 3.2 Install openai-php/laravel package
+  - [ ] 3.2 Install echolabsdev/prism package
   - [ ] 3.3 Create AILogoService interface
-  - [ ] 3.4 Implement OpenAI DALL-E 3 service
+  - [ ] 3.4 Implement Prism-based multi-provider service
   - [ ] 3.5 Add prompt template system
-  - [ ] 3.6 Implement retry and rate limiting logic
-  - [ ] 3.7 Create fallback service structure
+  - [ ] 3.6 Configure Prism providers (OpenAI, Anthropic, Ollama)
+  - [ ] 3.7 Create provider switching logic
   - [ ] 3.8 Verify all tests pass
 
 - [ ] 4. Create Logo Generator Command

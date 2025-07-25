@@ -32,7 +32,7 @@ The preview interface shows logos in various sizes and contexts (app icon, heade
 
 1. **Artisan Command** - Create `logo:generate` command with options for app name, style override, and color override
 2. **Agent OS Mission Parser** - Extract business attributes from `.agent-os/product/mission.md` and theme configuration
-3. **AI Service Integration** - Implement service to generate logos via OpenAI DALL-E 3 with fallback options
+3. **AI Service Integration** - Implement service to generate logos via Prism PHP with support for multiple providers
 4. **Preview Interface** - Web-based UI for reviewing and selecting from generated logo options
 5. **Asset Processing** - Convert selected logos to SVG and generate all required formats and sizes
 

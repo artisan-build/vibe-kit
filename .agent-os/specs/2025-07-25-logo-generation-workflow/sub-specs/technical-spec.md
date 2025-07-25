@@ -24,11 +24,12 @@ This is the technical specification for the spec detailed in @.agent-os/specs/20
 - Automatic browser launch for preview
 
 ### AI Integration Requirements
-- Primary service: OpenAI DALL-E 3 API
-- Fallback services: Stable Diffusion, Replicate
+- Primary framework: Prism PHP for multi-provider support
+- Supported providers: OpenAI (DALL-E 3), Anthropic, Ollama
 - Prompt template system for consistent results
-- Rate limiting and retry logic
+- Built-in rate limiting and retry logic via Prism
 - Error handling for API failures
+- Provider switching without code changes
 
 ### Preview Interface Requirements
 - Session-based access with expiration
@@ -72,8 +73,8 @@ This is the technical specification for the spec detailed in @.agent-os/specs/20
 
 ## External Dependencies
 
-- **openai-php/laravel** - OpenAI API integration for DALL-E 3
-- **Justification:** Official Laravel package for OpenAI integration
+- **echolabsdev/prism** - Multi-provider AI integration framework
+- **Justification:** Supports multiple AI providers with unified API, built-in retries, and provider switching
 - **intervention/image** - Image manipulation and format conversion
 - **Justification:** Mature Laravel image processing library with SVG support
 - **livewire/livewire** - Already installed, for preview interface
@@ -84,13 +85,21 @@ This is the technical specification for the spec detailed in @.agent-os/specs/20
 ```php
 // config/logo-generator.php
 return [
-    'ai_service' => env('LOGO_AI_SERVICE', 'openai'),
-    'services' => [
+    'ai_provider' => env('LOGO_AI_PROVIDER', 'openai'),
+    'providers' => [
         'openai' => [
             'api_key' => env('OPENAI_API_KEY'),
             'model' => 'dall-e-3',
             'size' => '1024x1024',
             'quality' => 'standard',
+        ],
+        'anthropic' => [
+            'api_key' => env('ANTHROPIC_API_KEY'),
+            'model' => 'claude-3-opus-20240229',
+        ],
+        'ollama' => [
+            'url' => env('OLLAMA_URL', 'http://localhost:11434'),
+            'model' => 'llava',
         ],
     ],
     'generation_count' => 6,
