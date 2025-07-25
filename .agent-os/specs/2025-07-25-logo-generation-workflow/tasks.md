@@ -16,15 +16,15 @@ These are the tasks to be completed for the spec detailed in @.agent-os/specs/20
   - [x] 1.6 Add model factories for testing
   - [x] 1.7 Verify all tests pass
 
-- [ ] 2. Build Agent OS Mission Parser Service
-  - [ ] 2.1 Write tests for MissionParser service
-  - [ ] 2.2 Create MissionParser interface
-  - [ ] 2.3 Implement mission.md parsing logic
-  - [ ] 2.4 Add business context extraction from Agent OS structure
-  - [ ] 2.5 Integrate theme color extraction from config and CSS
-  - [ ] 2.6 Create prompt context generation combining mission and theme
-  - [ ] 2.7 Handle fallback when Agent OS files not found
-  - [ ] 2.8 Verify all tests pass
+- [x] 2. Build Agent OS Mission Parser Service
+  - [x] 2.1 Write tests for MissionParser service
+  - [x] 2.2 Create MissionParser interface
+  - [x] 2.3 Implement mission.md parsing logic
+  - [x] 2.4 Add business context extraction from Agent OS structure
+  - [x] 2.5 Integrate theme color extraction from config and CSS
+  - [x] 2.6 Create prompt context generation combining mission and theme
+  - [x] 2.7 Handle fallback when Agent OS files not found
+  - [x] 2.8 Verify all tests pass
 
 - [ ] 3. Implement AI Service Integration
   - [ ] 3.1 Write tests for AI service integration

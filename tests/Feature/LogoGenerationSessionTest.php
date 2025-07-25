@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Models\LogoGenerationSession;
 use App\Models\LogoGenerationOption;
+use App\Models\LogoGenerationSession;
 use Carbon\Carbon;
 
 test('can create a logo generation session', function (): void {

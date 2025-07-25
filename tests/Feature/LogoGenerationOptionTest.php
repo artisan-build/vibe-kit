@@ -106,7 +106,7 @@ test('can store image data', function (): void {
     ]);
 
     $imageData = base64_encode('fake image data');
-    
+
     $option = LogoGenerationOption::create([
         'session_id' => $session->id,
         'prompt' => 'Test prompt',

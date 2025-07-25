@@ -22,7 +22,7 @@ return new class extends Migration
             $table->longText('image_data')->nullable();
             $table->json('metadata')->nullable();
             $table->timestamp('created_at')->useCurrent();
-            
+
             $table->index('session_id');
         });
     }

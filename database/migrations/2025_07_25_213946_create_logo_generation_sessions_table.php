@@ -21,10 +21,10 @@ return new class extends Migration
             $table->json('generated_options')->nullable();
             $table->string('selected_option_id')->nullable();
             $table->enum('status', ['pending', 'generating', 'ready', 'completed', 'expired'])
-                  ->default('pending');
+                ->default('pending');
             $table->timestamps();
             $table->timestamp('expires_at');
-            
+
             $table->index('status');
             $table->index('expires_at');
         });
