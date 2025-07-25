@@ -7,11 +7,9 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
-        "artisan-build/vibe": "*",
         "filament/filament": "~4.0",
         "laravel/fortify": "^1.27",
         "laravel/framework": "^12.0",
-        "laravel/jetstream": "^5.3",
         "laravel/tinker": "^2.10.1",
         "livewire/flux": "^2.1.1",
         "livewire/flux-pro": "^2.2",
@@ -57,6 +55,7 @@
         ],
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
@@ -88,8 +87,9 @@
             "vendor/bin/phpstan analyse --memory-limit=512M"
         ],
         "ready": [
-            "@php artisan config:clear --ansi",
-            "@php artisan ide-helper:models --write",
+            "@php artisan ide-helper:generate",
+            "@php artisan ide-helper:meta",
+            "@php artisan ide-helper:models -RW",
             "composer rector",
             "composer lint",
             "composer stan",
@@ -127,10 +127,6 @@
         "flux-pro": {
             "type": "composer",
             "url": "https://composer.fluxui.dev"
-        },
-        "vibe": {
-            "type": "path",
-            "url": "./packages/vibe"
         }
     }
 }
