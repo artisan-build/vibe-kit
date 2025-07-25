@@ -54,8 +54,8 @@ test('two factor authentication can be confirmed', function (): void {
 
     // Set component state directly
     $livewire->set('showingQrCode', true)
-             ->set('showingConfirmationForm', true)
-             ->set('confirmationCode', '123456');
+        ->set('showingConfirmationForm', true)
+        ->set('confirmationCode', '123456');
 
     // Call the confirmation method directly
     $livewire->call('confirmTwoFactorAuthentication');
@@ -243,6 +243,7 @@ test('verifyTwoFactorCode does not return false when both secret and code are no
         ->once()
         ->andReturnUsing(function () use (&$called) {
             $called = true;
+
             return true;
         });
 
