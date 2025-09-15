@@ -34,7 +34,8 @@
         "pestphp/pest-plugin-type-coverage": "^3.2",
         "phpstan/phpstan": "^2.1",
         "rector/rector": "^2.0",
-        "roave/security-advisories": "dev-latest"
+        "roave/security-advisories": "dev-latest",
+        "tightenco/duster": "^3.2"
     },
     "autoload": {
         "psr-4": {
@@ -92,7 +93,7 @@
             "@php artisan ide-helper:meta",
             "@php artisan ide-helper:models -RW",
             "composer rector",
-            "composer lint",
+            "vendor/bin/duster fix",
             "composer stan",
             "composer test",
             "composer update --dry-run roave/security-advisories"
