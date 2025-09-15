@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Livewire\Settings;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 use Livewire\Component;
 use PragmaRX\Google2FAQRCode\Google2FA as Google2FAQRCode;
 
@@ -36,7 +37,7 @@ class TwoFactorAuthentication extends Component
     /**
      * Render the component.
      */
-    public function render(): \Illuminate\View\View
+    public function render(): View
     {
         return view('livewire.settings.two-factor-authentication');
     }

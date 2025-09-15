@@ -2,12 +2,15 @@
 
 declare(strict_types=1);
 
-@covers(\App\Traits\TwoFactorAuthenticatable::class);
+use App\Traits\TwoFactorAuthenticatable;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+@covers(TwoFactorAuthenticatable::class);
 
 use App\Models\User;
 use Illuminate\Support\Facades\Cookie;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+uses(RefreshDatabase::class);
 
 test('two factor enabled attribute returns correct value', function (): void {
     $user = User::factory()->create();
