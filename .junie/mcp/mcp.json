@@ -1,0 +1,20 @@
+{
+    "mcpServers": {
+        "laravel-boost": {
+            "command": "/Users/ed/Library/Application Support/Herd/bin/php84",
+            "args": [
+                "/Users/ed/Projects/sites/vibe-kit/artisan",
+                "boost:mcp"
+            ]
+        },
+        "herd": {
+            "command": "/Users/ed/Library/Application Support/Herd/bin/php84",
+            "args": [
+                "/Applications/Herd.app/Contents/Resources/herd-mcp.phar"
+            ],
+            "env": {
+                "SITE_PATH": "/Users/ed/Projects/sites/vibe-kit"
+            }
+        }
+    }
+}

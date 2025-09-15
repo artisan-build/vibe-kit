@@ -14,28 +14,6 @@ use PragmaRX\Google2FA\Google2FA;
 trait TwoFactorAuthenticatable
 {
     /**
-     * Get the two factor authentication enabled status.
-     */
-    public function getTwoFactorEnabledAttribute(): bool
-    {
-        return ! is_null($this->two_factor_confirmed_at);
-    }
-
-    /**
-     * Get the Google2FA instance.
-     */
-    protected function getGoogle2FA(): Google2FA
-    {
-        static $google2fa = null;
-
-        if ($google2fa === null) {
-            $google2fa = new Google2FA;
-        }
-
-        return $google2fa;
-    }
-
-    /**
      * Generate a new two factor authentication secret.
      */
     public function generateTwoFactorSecret(): self
@@ -143,40 +121,6 @@ trait TwoFactorAuthenticatable
     }
 
     /**
-     * Get or create a device ID for the current device.
-     */
-    protected function getOrCreateDeviceId(): string
-    {
-        $deviceIdCookieName = 'device_id';
-
-        if (Cookie::has($deviceIdCookieName)) {
-            return Cookie::get($deviceIdCookieName);
-        }
-
-        $deviceId = (string) Str::uuid();
-
-        // Set the device ID cookie for 5 years (long-lived)
-        Cookie::queue($deviceIdCookieName, $deviceId, 60 * 24 * 365 * 5);
-
-        return $deviceId;
-    }
-
-    /**
-     * Generate a hashed cookie name based on user ID, password hash, device ID, and user-agent.
-     */
-    protected function generateTwoFactorCookieName(?string $userAgent = null): string
-    {
-        $deviceId = $this->getOrCreateDeviceId();
-        $userId = $this->id;
-        $passwordHash = $this->password;
-        $userAgent ??= Request::header('User-Agent', '');
-
-        // Concatenate and hash the values to generate a unique cookie name
-        // Ensure we're using string concatenation in the exact order expected by tests
-        return 'tf_'.hash('sha256', $userId.$passwordHash.$deviceId.$userAgent);
-    }
-
-    /**
      * Determine if the user has a trusted device for two factor authentication.
      */
     public function hasTrustedDevice(): bool
@@ -210,5 +154,61 @@ trait TwoFactorAuthenticatable
         $cookieName = $this->generateTwoFactorCookieName();
 
         Cookie::queue(Cookie::forget($cookieName));
+    }
+
+    /**
+     * Get the two factor authentication enabled status.
+     */
+    protected function getTwoFactorEnabledAttribute(): bool
+    {
+        return ! is_null($this->two_factor_confirmed_at);
+    }
+
+    /**
+     * Get the Google2FA instance.
+     */
+    protected function getGoogle2FA(): Google2FA
+    {
+        static $google2fa = null;
+
+        if ($google2fa === null) {
+            $google2fa = new Google2FA;
+        }
+
+        return $google2fa;
+    }
+
+    /**
+     * Get or create a device ID for the current device.
+     */
+    protected function getOrCreateDeviceId(): string
+    {
+        $deviceIdCookieName = 'device_id';
+
+        if (Cookie::has($deviceIdCookieName)) {
+            return Cookie::get($deviceIdCookieName);
+        }
+
+        $deviceId = (string) Str::uuid();
+
+        // Set the device ID cookie for 5 years (long-lived)
+        Cookie::queue($deviceIdCookieName, $deviceId, 60 * 24 * 365 * 5);
+
+        return $deviceId;
+    }
+
+    /**
+     * Generate a hashed cookie name based on user ID, password hash, device ID, and user-agent.
+     */
+    protected function generateTwoFactorCookieName(?string $userAgent = null): string
+    {
+        $deviceId = $this->getOrCreateDeviceId();
+        $userId = $this->id;
+        $passwordHash = $this->password;
+        $userAgent ??= Request::header('User-Agent', '');
+
+        // Concatenate and hash the values to generate a unique cookie name
+        // Ensure we're using string concatenation in the exact order expected by tests
+        return 'tf_'.hash('sha256', $userId.$passwordHash.$deviceId.$userAgent);
     }
 }

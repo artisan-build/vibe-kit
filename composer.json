@@ -7,7 +7,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
-        "filament/filament": "~4.0",
+        "filament/filament": "^4.0",
         "laravel/fortify": "^1.27",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
@@ -23,17 +23,20 @@
         "driftingly/rector-laravel": "^2.0",
         "fakerphp/faker": "^1.23",
         "larastan/larastan": "^3.4",
+        "laravel/boost": "^1.1",
         "laravel/pail": "^1.2.2",
         "laravel/pint": "^1.18",
         "laravel/sail": "^1.41",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.6",
-        "pestphp/pest": "^3.8",
-        "pestphp/pest-plugin-laravel": "^3.2",
-        "pestphp/pest-plugin-type-coverage": "^3.2",
+        "pestphp/pest": "^4.0",
+        "pestphp/pest-plugin-browser": "^4.0",
+        "pestphp/pest-plugin-laravel": "^4.0",
+        "pestphp/pest-plugin-type-coverage": "^4.0",
         "phpstan/phpstan": "^2.1",
         "rector/rector": "^2.0",
-        "roave/security-advisories": "dev-latest"
+        "roave/security-advisories": "dev-latest",
+        "tightenco/duster": "^3.2"
     },
     "autoload": {
         "psr-4": {
@@ -91,7 +94,7 @@
             "@php artisan ide-helper:meta",
             "@php artisan ide-helper:models -RW",
             "composer rector",
-            "composer lint",
+            "vendor/bin/duster fix",
             "composer stan",
             "composer test",
             "composer update --dry-run roave/security-advisories"
