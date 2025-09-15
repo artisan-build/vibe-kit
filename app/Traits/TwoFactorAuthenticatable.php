@@ -14,14 +14,6 @@ use PragmaRX\Google2FA\Google2FA;
 trait TwoFactorAuthenticatable
 {
     /**
-     * Get the two factor authentication enabled status.
-     */
-    public function getTwoFactorEnabledAttribute(): bool
-    {
-        return ! is_null($this->two_factor_confirmed_at);
-    }
-
-    /**
      * Generate a new two factor authentication secret.
      */
     public function generateTwoFactorSecret(): self
@@ -162,6 +154,14 @@ trait TwoFactorAuthenticatable
         $cookieName = $this->generateTwoFactorCookieName();
 
         Cookie::queue(Cookie::forget($cookieName));
+    }
+
+    /**
+     * Get the two factor authentication enabled status.
+     */
+    protected function getTwoFactorEnabledAttribute(): bool
+    {
+        return ! is_null($this->two_factor_confirmed_at);
     }
 
     /**
