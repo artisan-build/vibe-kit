@@ -59,15 +59,15 @@
     --color-red-900: #7f1d1d;
     --color-red-950: #450a0a;
 
-    --color-accent: var(--color-violet-600);
-    --color-accent-content: var(--color-violet-600);
+    --color-accent: var(--color-red-600);
+    --color-accent-content: var(--color-red-600);
     --color-accent-foreground: var(--color-white);
 }
 
 @layer theme {
     .dark {
-        --color-accent: var(--color-violet-500);
-        --color-accent-content: var(--color-violet-500);
+        --color-accent: var(--color-red-500);
+        --color-accent-content: var(--color-red-500);
         --color-accent-foreground: var(--color-neutral-800);
     }
 }

@@ -50,13 +50,6 @@ laravel new my-app --using=artisan-build/vibe-kit
 
 ### AI Agent Instructions
 
-### ./agents/instructions.md
-
-These are the core instructions that are used to guide all LLM workflows. We reference this file inside of AGENTS.md, cursor.md, and any other locations where the LLM agents we use expect to find project-specific instructions.
-
-### .agents/mutation.md
-
-These are instructions to guide the agent through our mutation testing workflow. Mutation testing is a great fit for LLM agents because it's repetitive, time-consuming, and simple. By running this workflow regularly, we build out our test suite to ensure more complete coverage of our application.
 
 
 

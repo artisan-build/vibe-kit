@@ -9,3 +9,4 @@
 CHANGELOG.md export-ignore
 README.md export-ignore
 .agent-os/ export-ignore
+agent-os/ export-ignore
