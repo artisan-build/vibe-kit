@@ -41,6 +41,7 @@
         "phpstan/phpstan": "^2.1",
         "rector/rector": "^2.0",
         "roave/security-advisories": "dev-latest",
+        "slevomat/coding-standard": "*",
         "spatie/laravel-stubs": "^3.1",
         "tightenco/duster": "^3.2"
     },
@@ -95,6 +96,12 @@
         "stan": [
             "vendor/bin/phpstan analyse --memory-limit=512M"
         ],
+        "sniff": [
+            "vendor/bin/phpcs"
+        ],
+        "sniff-fix": [
+            "vendor/bin/phpcbf"
+        ],
         "ready": [
             "@php artisan config:clear --ansi",
             "@php artisan ide-helper:models --write",
@@ -133,7 +140,8 @@
         "sort-packages": true,
         "allow-plugins": {
             "pestphp/pest-plugin": true,
-            "php-http/discovery": true
+            "php-http/discovery": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
     "minimum-stability": "dev",
