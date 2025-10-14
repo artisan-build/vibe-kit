@@ -3,7 +3,10 @@
     "name": "artisan-build/vibe-kit",
     "type": "project",
     "description": "Our TALL Stack starter kit optimized for AI",
-    "keywords": ["laravel", "framework"],
+    "keywords": [
+        "laravel",
+        "framework"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.2",
@@ -62,7 +65,6 @@
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force",
             "@php artisan spatie-stub:publish --force"
-
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
@@ -85,7 +87,7 @@
             "@php artisan test --parallel --recreate-databases"
         ],
         "lint": [
-            "vendor/bin/pint"
+            "vendor/bin/duster fix"
         ],
         "rector": [
             "vendor/bin/rector"
@@ -94,14 +96,12 @@
             "vendor/bin/phpstan analyse --memory-limit=512M"
         ],
         "ready": [
-            "@php artisan ide-helper:generate",
-            "@php artisan ide-helper:meta",
-            "@php artisan ide-helper:models -M",
+            "@php artisan config:clear --ansi",
+            "@php artisan ide-helper:models --write",
             "composer rector",
-            "vendor/bin/duster fix",
+            "composer lint",
             "composer stan",
-            "composer test",
-            "composer update --dry-run roave/security-advisories"
+            "composer test"
         ],
         "coverage-html": [
             "XDEBUG_MODE=coverage herd debug ./vendor/bin/pest --coverage-php coverage.php",
@@ -112,6 +112,14 @@
         ],
         "types": [
             "vendor/bin/pest --type-coverage"
+        ],
+        "report": [
+            "@php artisan config:clear --ansi || true",
+            "@php artisan ide-helper:models --write || true",
+            "composer rector || true",
+            "composer lint || true",
+            "composer stan || true",
+            "composer test || true"
         ]
     },
     "extra": {
